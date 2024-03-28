@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;500;800&display=swap" rel="stylesheet">
+    <script src="https://beamanalytics.b-cdn.net/beam.min.js" data-token="144c70d3-79c3-425d-a6fd-3468fdf87056" async></script>
+    <link rel="shortcut icon" href="/static/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="/static/tailwind.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/themes/light.css" />
+
+    <style>
+      body {
+          font-family: 'Inter', sans-serif;
+          margin: 0;
+          transition: opacity 250ms ease-in 1500ms;
+      }
+      body.loaded {
+        opacity: 1 !important;
+      }
+      .card-overview {
+        max-width: 300px;
+      }
+      
+      .card-overview small {
+        color: var(--sl-color-neutral-500);
+      }
+      
+      .card-overview [slot='footer'] {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+      }
+      .topbar {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background: #2a242d;
+        color: whitesmoke;
+        height: 60px;
+      }
+    </style>
+    <script onload="autoloaderLoaded()" type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.8.0/cdn/shoelace-autoloader.js"></script>
+
+    <script>
+      const autoloaderLoaded = () => {
+        document.querySelector('body').classList.add('loaded');
+        setTimeout(() => {
+          document.querySelector('.progress').classList.add('hidden');
+        }, 750)
+      }
+    </script>
+  </head>
+
+<body style="opacity: 0" class="overflow-hidden loaded">
+  <sl-progress-bar class="progress hidden" indeterminate="" style="--height: 2px;" value="0"></sl-progress-bar>
+  <div class="topbar">
+    <h5>Storyboard pre-visualization</h5>
+    <img src="/static/mark.svg" class="w-[60px] px-3">
+  </div>
+  <div class="flex">
+    <div class="sidebar">
+      <sl-menu class="mt-2" role="menu">
+        <div>
+          <sl-menu-item value="image" role="menuitem" aria-disabled="false">
+            <sl-icon slot="prefix" name="image"></sl-icon>
+            Generate Image
+          </sl-menu-item>
+        </div>
+        <div>
+          <sl-menu-item value="video" role="menuitem" aria-disabled="false">
+            <sl-icon slot="prefix" name="film"></sl-icon>
+            Generate Video
+          </sl-menu-item>
+        </div>
+      </sl-menu>
+    </div>
+    <div id="view" class="grid w-full" style="height: calc(100vh - 60px);"></div>
+  </div>
+    
+    <script defer="">
+      const showView = async() => {
+        document.querySelector('body').classList.add('overflow-hidden');
+        document.querySelector('#view').innerHTML = "<style id='dashboard-styles'></style><div id='dashboard'></div>";
+        await import('/static/dashboard/index.js');
+        const cssPromise = await fetch('/static/dashboard/index.css');
+        const css = await cssPromise.text();
+        document.querySelector('#dashboard-styles').innerHTML = css;
+      }
+      showView();
+    </script>
+</body>
+</html>

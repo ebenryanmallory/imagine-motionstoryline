@@ -1,15 +1,25 @@
 {
-  "name": "hello-ai",
-  "version": "0.0.0",
-  "private": true,
+  "name": "imagine-motionstoryline",
+  "version": "0.0.1",
+  "private": false,
   "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev"
+    "deploy": "yarn prebuild & npx wrangler deploy",
+    "start": "yarn prebuild & yarn tailwind & npx wrangler dev --remote",
+    "tailwind": "npx tailwindcss -i ./tailwind.css -o ./assets/static/tailwind.css",
+    "dev": "yarn prebuild & yarn tailwind & npx wrangler dev",
+    "prebuild": "cd ./src/dashboard & yarn build"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240208.0",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5.0.4",
-    "wrangler": "^3.0.0"
+    "wrangler": "^3.37.0"
+  },
+  "dependencies": {
+    "@cloudflare/ai": "^1.0.50",
+    "cropperjs": "^2.0.0-beta.4",
+    "dotenv": "^16.4.5",
+    "form-data": "^4.0.0",
+    "hono": "^4.0.2"
   }
 }
