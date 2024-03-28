@@ -16,9 +16,9 @@ export const setupImageChangeListener = () => {
 export async function generateImage() {
     document.querySelector('.spinner').classList.remove('hidden');
     try {
-      const prompt = document.querySelector('#prompt').value;
-      if (!prompt) {
-        return alert('No text description entered');
+      let prompt = document.querySelector('#prompt').value;
+      if (!prompt || prompt.length < 1) {
+        prompt = document.querySelector('#promptSelect').value;
       }
       const url = "https://imagine.motionstoryline.com/image";
       const response = await fetch(url, {

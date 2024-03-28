@@ -35,7 +35,7 @@ export const generateVideo = async () => {
   
 export const pollVideo = async () => {
     document.querySelector('.spinner').classList.remove('hidden');
-    const generationID = state.generationID[state.currentVideo];
+    const generationID = state.generationID[state.currentSlide];
     if (generationID.length < 1) { return console.log('generationID not found')}
     const url = "https://imagine.motionstoryline.com/poll_video";
     const response = await fetch(url, {
