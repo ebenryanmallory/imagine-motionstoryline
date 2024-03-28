@@ -10,12 +10,12 @@ const reactiveVideo = (newValue: string) => { return /*html*/`
 
 const setupEventListeners = () => {
   const generateButton = document.querySelector('#generate-video');
-  generateButton.addEventListener('click', generateVideo);
+  (generateButton as HTMLElement).addEventListener('click', generateVideo);
   const pollButton = document.querySelector('#poll-video');
-  pollButton.addEventListener('click', pollVideo);
+  (pollButton as HTMLElement).addEventListener('click', pollVideo);
   onChange('videos', (newValue: string[], oldValue: string[]) => {
     const container = document.querySelector('#video-container');
-    container.innerHTML = reactiveVideo(newValue[state.currentSlide]);
+    (container as HTMLElement).innerHTML = reactiveVideo(newValue[state.currentSlide]);
   });
 };
 
@@ -23,11 +23,11 @@ export const videoOptions = () => {
   setTimeout(() => setupEventListeners(), 0);
   return /*html*/`
   <sl-card class="card-header w-full px-10">
-    <sl-spinner class="spinner hidden" style="font-size: 3rem; --indicator-color: lightgreen; --track-color: green;"></sl-spinner>
+    <sl-spinner class="spinner hidden" style="font-size: 3rem; --indicator-color: lightgreen; --track-color: darkgreen;"></sl-spinner>
     <p>Generate video from current image.</p>
     <sl-button id="generate-video" class="py-2">Generate Video</sl-button>
     <sl-button id="poll-video" class="py-2">Poll Video</sl-button>
     <p>Videos take a couple of minutes to generate. Check to see if it ready by clicking poll.
   </sl-card>
-  <div id="video-container" class="w-full px-10 py-3"></div>
+  <div id="video-container" class="w-full py-3 overflow-hidden mb-2"></div>
 `};

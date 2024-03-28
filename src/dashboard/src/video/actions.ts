@@ -1,6 +1,6 @@
 import { state, updateVideos, updateGenerationID } from '../../store';
 
-export async function blobUrlToBase64(blobUrl) {
+export async function blobUrlToBase64(blobUrl: string) {
     const response = await fetch(blobUrl);
     const blob = await response.blob();
     return new Promise((resolve, reject) => {
@@ -12,7 +12,8 @@ export async function blobUrlToBase64(blobUrl) {
   }
   
 export const generateVideo = async () => {
-    document.querySelector('.spinner').classList.remove('hidden');
+    const loader = (document.querySelector('.spinner') as HTMLInputElement);
+    loader.classList.remove('hidden');
     const imageBase64 = await blobUrlToBase64(state.images[state.currentSlide]);
     const url = "https://imagine.motionstoryline.com/video";
     const response = await fetch(url, {
@@ -30,11 +31,12 @@ export const generateVideo = async () => {
     const responseSON = await response.json();
     const generationID = responseSON.generationID;
     updateGenerationID(generationID)
-    document.querySelector('.spinner').classList.add('hidden');
+    loader.classList.add('hidden');
 }
   
 export const pollVideo = async () => {
-    document.querySelector('.spinner').classList.remove('hidden');
+    const loader = (document.querySelector('.spinner') as HTMLInputElement);
+    loader.classList.remove('hidden');
     const generationID = state.generationID[state.currentSlide];
     if (generationID.length < 1) { return console.log('generationID not found')}
     const url = "https://imagine.motionstoryline.com/poll_video";
@@ -53,5 +55,5 @@ export const pollVideo = async () => {
     const arrayBuffer = await response.arrayBuffer();
     const blob = new Blob([arrayBuffer], { type: 'video/*' });
     updateVideos(URL.createObjectURL(blob));
-    document.querySelector('.spinner').classList.add('hidden');
+    loader.classList.add('hidden');
 }

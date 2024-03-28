@@ -50,4 +50,4 @@ const panelhtml = () => {
         </sl-split-panel>
     `
 };
-document.querySelector('#dashboard').innerHTML = panelhtml();
+(document.querySelector('#dashboard') as HTMLElement).innerHTML = panelhtml();

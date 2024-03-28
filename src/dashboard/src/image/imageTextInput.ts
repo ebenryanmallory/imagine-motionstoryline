@@ -16,17 +16,18 @@ export const imageTextInput = () => {
   return /*html*/`
   <div>
     <sl-card class="card-header w-full px-10">
-      <sl-spinner class="spinner hidden" style="font-size: 3rem; --indicator-color: lightgreen; --track-color: green;"></sl-spinner>
+      <sl-spinner class="spinner hidden" style="font-size: 3rem; --indicator-color: lightgreen; --track-color: darkgreen;"></sl-spinner>
       <p>Describe the image you want to generate.</p>
       <sl-input id="prompt" placeholder="Image description prompt" filled></sl-input>
-      <sl-select id="promptSelect" placeholder="Or start with a preset prompt" size="small" clearable placement="top" value="option-1">
-        <sl-option value="option-1">Fluffy catbear in his natural habitat</sl-option>
-        <sl-option value="option-2">Fluffy dragon cat photo by National Geographic</sl-option>
-        <sl-option value="option-3">White monkey boar on the hunt in African jungle</sl-option>
+      <br />
+      <sl-select id="promptSelect" label="Or start with a preset" size="small" clearable placement="top" value="Fluffy_catbear_in_his_natural_habitat">
+        <sl-option value="Fluffy_catbear_in_his_natural_habitat">Fluffy catbear in his natural habitat</sl-option>
+        <sl-option value="Fluffy_dragon_cat_photo_by_National_Geographic">Fluffy dragon cat photo by National Geographic</sl-option>
+        <sl-option value="White_monkey_parrot_in_African_jungle">White monkey parrot in African jungle</sl-option>
       </sl-select>
       <sl-button id="generate" class="py-2">Generate Image</sl-button>
     </sl-card>
-    <div id="image-container" class="w-full px-10 py-3"></div>
+    <div id="image-container" class="w-full px-10 py-3 overflow-hidden mb-2"></div>
     <canvas id="canvas" class="hidden"></canvas>
   </div>
 `};

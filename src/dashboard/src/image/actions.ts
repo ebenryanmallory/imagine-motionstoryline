@@ -14,11 +14,12 @@ export const setupImageChangeListener = () => {
   };
 
 export async function generateImage() {
-    document.querySelector('.spinner').classList.remove('hidden');
+    const loader = (document.querySelector('.spinner') as HTMLInputElement);
+    loader.classList.remove('hidden');
     try {
       let prompt = document.querySelector('#prompt').value;
       if (!prompt || prompt.length < 1) {
-        prompt = document.querySelector('#promptSelect').value;
+        prompt = (document.querySelector('#promptSelect') as HTMLInputElement).value.replace(/_/g, ' ');
       }
       const url = "https://imagine.motionstoryline.com/image";
       const response = await fetch(url, {
@@ -40,7 +41,7 @@ export async function generateImage() {
       console.error('Error generating image:', error);
       alert('Something has gone wrong. Please try again.');
     }
-    document.querySelector('.spinner').classList.add('hidden');
+    loader.classList.add('hidden');
 }
 
 async function cropImage(blobURL: string, outputWidth: number = 768, outputHeight: number = 768): Promise<string> {
