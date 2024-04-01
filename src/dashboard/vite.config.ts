@@ -8,9 +8,10 @@ export default defineConfig({
         outDir: '../../assets/static/dashboard/',
         rollupOptions: {
             output: {
-                inlineDynamicImports: true,
+                inlineDynamicImports: false,
                 assetFileNames: '[name].[ext]',
-                entryFileNames: 'index.js'
+                chunkFileNames: '[name].js',
+                entryFileNames: '[name].js'
             }
         }
     },
