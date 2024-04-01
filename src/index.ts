@@ -130,4 +130,17 @@ app.post('/poll_video', async (c) => {
     
 })
 
+app.get('/firebase-credentials', async (c) => {
+    const firebaseConfig = {
+        apiKey: c.env.FIREBASE_API_KEY,
+        authDomain: c.env.FIREBASE_AUTH_DOMAIN,
+        databaseURL: c.env.FIREBASE_DATABASE_URL,
+        projectId: c.env.FIREBASE_PROJECT_ID,
+        storageBucket: c.env.FIREBASE_STORAGE_BUCKET
+    }
+    return new Response(JSON.stringify(firebaseConfig), {
+        headers: { 'Content-Type': 'application/json' }
+    });
+});
+
 export default app
