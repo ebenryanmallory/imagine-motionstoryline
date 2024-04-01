@@ -173,3 +173,6 @@ dist
 
 yarn.lock
 package-lock.json
+
+# Dashboard assets are generated
+assets/static/dashboard/*
