@@ -11,6 +11,7 @@ const reactiveImage = (newValue: string) => { return /*html*/`
 const setupEventListeners = () => {
   const carousel = document.querySelector('.nav-carousel') as HTMLElement;
   const modalImage = document.querySelector('#modal-image') as HTMLElement;
+  const dialog = document.querySelector('.dialog-width') as HTMLElement;
   onChange('images', (newValue: string[]) => {
       let imageString = ''
       for (const pngData of newValue) {
@@ -29,7 +30,6 @@ const setupEventListeners = () => {
     updateCurrentSlide(slideIndex)
   });
   // modal
-  const dialog = document.querySelector('.dialog-width') as HTMLElement;
   const downloadButton = dialog.querySelector('sl-button[slot="footer"]') as HTMLElement;;
   downloadButton.addEventListener('click', () => {
     const downloadLink = document.createElement('a');

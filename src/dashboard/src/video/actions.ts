@@ -1,4 +1,5 @@
 import { state, updateVideos, updateGenerationID } from '../../store';
+import { baseURL } from '../universal/global';
 
 export async function blobUrlToBase64(blobUrl: string) {
     const response = await fetch(blobUrl);
@@ -15,7 +16,7 @@ export const generateVideo = async () => {
     const loader = (document.querySelector('.spinner') as HTMLInputElement);
     loader.classList.remove('hidden');
     const imageBase64 = await blobUrlToBase64(state.images[state.currentSlide]);
-    const url = "https://imagine.motionstoryline.com/video";
+    const url = `${baseURL}/video`;
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -39,7 +40,7 @@ export const pollVideo = async () => {
     loader.classList.remove('hidden');
     const generationID = state.generationID[state.currentSlide];
     if (generationID.length < 1) { return console.log('generationID not found')}
-    const url = "https://imagine.motionstoryline.com/poll_video";
+    const url = `${baseURL}/poll_video`;
     const response = await fetch(url, {
       method: "POST",
       headers: {

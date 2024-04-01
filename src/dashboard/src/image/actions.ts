@@ -1,11 +1,12 @@
 import { onChange, updateImages } from '../../store';
+import { baseURL } from '../universal/global';
 
 const reactiveImage = (newValue: string) => { return /*html*/`
   <img src='${newValue}' class='max-w-full max-h-full' />
 `};
 
 export const setupImageChangeListener = () => {
-  const container = document.querySelector('#image-container');
+  const container = document.querySelector('#image-container') as HTMLElement;
   onChange('images', (newValue: string[]) => {
         for (const pngData in newValue) {
           container.innerHTML = reactiveImage(pngData);
@@ -14,14 +15,14 @@ export const setupImageChangeListener = () => {
   };
 
 export async function generateImage() {
-    const loader = (document.querySelector('.spinner') as HTMLInputElement);
+    const loader = (document.querySelector('.spinner') as HTMLElement);
     loader.classList.remove('hidden');
     try {
-      let prompt = document.querySelector('#prompt').value;
+      let prompt = (document.querySelector('#prompt') as HTMLInputElement).value;
       if (!prompt || prompt.length < 1) {
         prompt = (document.querySelector('#promptSelect') as HTMLInputElement).value.replace(/_/g, ' ');
       }
-      const url = "https://imagine.motionstoryline.com/image";
+      const url = `${baseURL}/image`;
       const response = await fetch(url, {
         method: "POST",
         headers: {
