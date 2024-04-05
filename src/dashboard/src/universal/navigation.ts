@@ -51,15 +51,12 @@ const setupEventListeners = () => {
 export const navigation = () => { 
   setTimeout(() => setupEventListeners(), 0);
   return /*html*/`
-  <sl-carousel class="vertical nav-carousel" pagination orientation="vertical" style="--aspect-ratio: 3/2;"></sl-carousel>
+  <sl-carousel class="vertical nav-carousel px-3" pagination orientation="vertical" style="--aspect-ratio: 3/2;"></sl-carousel>
   <sl-dialog label="Full Image" class="dialog-width" style="--width: 90vw;">
     <div id="modal-image"></div>
     <sl-button slot="footer" variant="primary">Download image</sl-button>
   </sl-dialog>
   <style>
-  .vertical {
-    max-height: 400px;
-  }
 
   .vertical::part(base) {
     grid-template-areas: 'slides slides pagination';

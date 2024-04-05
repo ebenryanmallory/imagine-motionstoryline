@@ -1,6 +1,7 @@
 import { createStore } from "@stencil/store";
 
 interface State {
+  prompts: string[];
   images: string[];
   videos: string[];
   generationID: string[];
@@ -10,6 +11,7 @@ interface State {
 }
 
 const { state, onChange } = createStore<State>({
+  prompts: [],
   images: [],
   videos: [],
   generationID: [],
@@ -18,6 +20,9 @@ const { state, onChange } = createStore<State>({
   userID: ""
 });
 
+export function updatePrompts(newPrompt: string) {
+  state.prompts = [...state.prompts, newPrompt];
+}
 export function updateImages(newImageData: string) {
   state.images = [...state.images, newImageData];
 }

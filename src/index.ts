@@ -37,10 +37,18 @@ app.post('/bucket', async (c) => {
 
     const body = await c.req.json();
     const base64Images = body.images;
+    const base64Videos = body.videos;
+    const prompts = body.prompts;
+    const userID = body.userID;
     const mimeType = "image/png";
     const uploadPromises = base64Images.map((base64Image: string, index: number) => {
-        const fileName = "custom.png";
+        const fileName = `${userID}/images/${prompts[index]}.png`;
         const blob = base64ToBlob(base64Image, mimeType);
+        return c.env.IMAGINE_BUCKET.put(fileName, blob);
+    });
+    base64Videos.map((base64Video: string, index: number) => {
+        const fileName = `${userID}/videos/${prompts[index]}.mp4`;
+        const blob = base64ToBlob(base64Video, "video/*");
         return c.env.IMAGINE_BUCKET.put(fileName, blob);
     });
     const responseArray = await Promise.all(uploadPromises);
@@ -63,7 +71,7 @@ app.post('/image', async (c) => {
     return new Response(response, {
         headers: {
             "content-type": "image/png",
-        },
+        }
     });
 })
 

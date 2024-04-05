@@ -1,4 +1,4 @@
-import { onChange, updateImages } from '../../store';
+import { onChange, updateImages, updatePrompts } from '../../store';
 
 const reactiveImage = (newValue: string) => { return /*html*/`
   <img src='${newValue}' class='max-w-full max-h-full' />
@@ -21,8 +21,7 @@ export async function generateImage() {
       if (!prompt || prompt.length < 1) {
         prompt = (document.querySelector('#promptSelect') as HTMLInputElement).value.replace(/_/g, ' ');
       }
-      const url = `/image`;
-      const response = await fetch(url, {
+      const response = await fetch(`/image`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -37,6 +36,7 @@ export async function generateImage() {
       const blob = await response.blob();
       const croppedData = await cropImage(URL.createObjectURL(blob));
       updateImages(croppedData);
+      updatePrompts(prompt);
     } catch (error) {
       console.error('Error generating image:', error);
       alert('Something has gone wrong. Please try again.');

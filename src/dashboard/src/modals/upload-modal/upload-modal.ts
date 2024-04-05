@@ -10,18 +10,35 @@ const setupEventListeners = () => {
     const uploadAllButton = document.querySelector('#uploadAllButton') as HTMLElement;
     uploadAllButton.addEventListener('click', async (e: any) => {
         if (state.images.length < 1) { return };
+        const checkboxes = document.querySelectorAll('.image-checkbox') as NodeListOf<HTMLInputElement>;
+        const selectedImages = Array.from(checkboxes).map((checkbox, index) => checkbox.checked ? state.images[index] : '');
+        const selectedVideos = Array.from(checkboxes).map((checkbox, index) => checkbox.checked ? state.videos[index] : '');
+        const selectedPrompts = Array.from(checkboxes).map((checkbox, index) => checkbox.checked ? state.prompts[index] : '');
         async function convertImagesToBase64(images: string[]) {
             const base64Promises = images.map(blobUrl => blobUrlToBase64(blobUrl));
             return await Promise.all(base64Promises);
         }
-        const base64Images = await convertImagesToBase64(state.images);
+        async function convertVideosToBase64(videos: string[]) {
+            const base64Promises = videos.map(blobUrl => blobUrlToBase64(blobUrl));
+            return await Promise.all(base64Promises);
+        }
+        const [base64Images, base64Videos] = await Promise.all([
+            convertImagesToBase64(selectedImages.filter(image => image !== '') as string[]),
+            convertVideosToBase64(selectedVideos.filter(video => video !== '') as string[])
+        ]);
+        if (selectedPrompts.length !== base64Images.length) { return console.log('Length mismatch') };
 
         const bucketResponse = await fetch('/bucket', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ images: base64Images })
+            body: JSON.stringify({
+                images: base64Images,
+                videos: base64Videos,
+                userID: state.userID,
+                prompts: selectedPrompts
+            })
         });
         if (!bucketResponse.ok) {
             const responseJson = await bucketResponse.json();
@@ -47,14 +64,14 @@ export const uploadModal = () => {
                     <sl-divider vertical></sl-divider>
                     <p>Image ${index + 1}</p>
                     <sl-divider vertical></sl-divider>
-                    <sl-checkbox checked>Include image</sl-checkbox>
+                    <sl-checkbox checked class="image-checkbox">Include image</sl-checkbox>
                 </div>
                 <sl-divider></sl-divider>
             `})}
             ${state.videos.map((video, index) => {
                 return /*html*/`
                 <p>Videos</p>
-                <div class="flex items-center h-[3rem]">
+                <div class="flex items-center h-[3rem] video-container">
                     <video src='${video}' class="h-[3rem]" autoplay="false"></video>
                     <sl-divider vertical></sl-divider>
                     <p>Video ${index + 1}</p>
