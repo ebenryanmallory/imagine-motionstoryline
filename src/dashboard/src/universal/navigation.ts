@@ -2,6 +2,14 @@ import '@shoelace-style/shoelace/dist/components/carousel/carousel.js';
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import { onChange, updateCurrentSlide, state } from '../../store';
 
+declare global {
+  interface HTMLElementTagNameMap {
+    'SlDialog': HTMLElement & {
+      show(): void;
+    };
+  }
+}
+
 const reactiveImage = (newValue: string) => { return /*html*/`
   <sl-carousel-item>
     <img src='${newValue}' class='w-full h-full cursor-pointer' alt="" />
@@ -11,7 +19,7 @@ const reactiveImage = (newValue: string) => { return /*html*/`
 const setupEventListeners = () => {
   const carousel = document.querySelector('.nav-carousel') as HTMLElement;
   const modalImage = document.querySelector('#modal-image') as HTMLElement;
-  const dialog = document.querySelector('.dialog-width') as HTMLElement;
+  const dialog = document.querySelector('.dialog-width') as HTMLDialogElement;
   onChange('images', (newValue: string[]) => {
       let imageString = ''
       for (const pngData of newValue) {

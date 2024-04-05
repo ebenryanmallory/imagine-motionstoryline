@@ -11,6 +11,18 @@ const reactiveImage = (newValue: string) => { return /*html*/`
   <img src='${newValue}' class='max-w-full max-h-[calc(100vh-188px-60px)]' />
 `};
 
+const setupEventListeners = () => {
+  const generateButton = document.querySelector('#generate');
+  generateButton.addEventListener('click', generateImage);
+  const container = document.querySelector('#image-container');
+  onChange('images', (newValue: string[]) => {
+    container.innerHTML = reactiveImage(newValue[newValue.length - 1]);
+  });
+  onChange('currentSlide', (currentSlide: number) => {
+    container.innerHTML = reactiveImage(state.images[currentSlide]);
+  });
+};
+
 export const imageTextInput = () => {
   setTimeout(() => setupEventListeners(), 0);
   return /*html*/`
@@ -31,15 +43,3 @@ export const imageTextInput = () => {
     <canvas id="canvas" class="hidden"></canvas>
   </div>
 `};
-
-const setupEventListeners = () => {
-  const generateButton = document.querySelector('#generate');
-  generateButton.addEventListener('click', generateImage);
-  const container = document.querySelector('#image-container');
-  onChange('images', (newValue: string[]) => {
-    container.innerHTML = reactiveImage(newValue[newValue.length - 1]);
-  });
-  onChange('currentSlide', (currentSlide: number) => {
-    container.innerHTML = reactiveImage(state.images[currentSlide]);
-  });
-};

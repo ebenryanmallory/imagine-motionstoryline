@@ -174,5 +174,7 @@ dist
 yarn.lock
 package-lock.json
 
+wrangler.toml
+
 # Dashboard assets are generated
 assets/static/dashboard/*

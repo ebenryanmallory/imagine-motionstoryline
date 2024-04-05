@@ -1,11 +1,35 @@
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/divider/divider.js';
+import { blobUrlToBase64 } from '../../universal/global';
 import { state } from '../../../store';
 import { login } from './login'
 
 const setupEventListeners = () => {
     const dialog = document.querySelector('.upload-modal') as HTMLElement;
     dialog.show();
+    const uploadAllButton = document.querySelector('#uploadAllButton') as HTMLElement;
+    uploadAllButton.addEventListener('click', async (e: any) => {
+        if (state.images.length < 1) { return };
+        async function convertImagesToBase64(images: string[]) {
+            const base64Promises = images.map(blobUrl => blobUrlToBase64(blobUrl));
+            return await Promise.all(base64Promises);
+        }
+        const base64Images = await convertImagesToBase64(state.images);
+
+        const bucketResponse = await fetch('/bucket', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ images: base64Images })
+        });
+        if (!bucketResponse.ok) {
+            const responseJson = await bucketResponse.json();
+            console.log('Upload successful', responseJson);
+        } else {
+            console.error('Upload failed', await bucketResponse.text());
+        }
+    });
 }
 
 export const uploadModal = () => { 
@@ -39,8 +63,7 @@ export const uploadModal = () => {
                 </div>
                 <sl-divider></sl-divider>
             `})}
-            
         </div>
-        <sl-button slot="footer" variant="primary">Upload all</sl-button>
+        <sl-button id="uploadAllButton" slot="footer" variant="primary" ${state.userID === "" ? 'disabled' : ''}>Upload all</sl-button>
     </sl-dialog>
 `}

@@ -1,23 +1,11 @@
 import { state, updateVideos, updateGenerationID } from '../../store';
-import { baseURL } from '../universal/global';
-
-export async function blobUrlToBase64(blobUrl: string) {
-    const response = await fetch(blobUrl);
-    const blob = await response.blob();
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result.split(',')[1]); // Remove the Data URL prefix
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-    });
-  }
+import { blobUrlToBase64 } from '../universal/global';
   
 export const generateVideo = async () => {
     const loader = (document.querySelector('.spinner') as HTMLInputElement);
     loader.classList.remove('hidden');
     const imageBase64 = await blobUrlToBase64(state.images[state.currentSlide]);
-    const url = `${baseURL}/video`;
-    const response = await fetch(url, {
+    const response = await fetch(`/video`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -40,8 +28,8 @@ export const pollVideo = async () => {
     loader.classList.remove('hidden');
     const generationID = state.generationID[state.currentSlide];
     if (generationID.length < 1) { return console.log('generationID not found')}
-    const url = `${baseURL}/poll_video`;
-    const response = await fetch(url, {
+
+    const response = await fetch(`/poll_video`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

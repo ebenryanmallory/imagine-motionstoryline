@@ -5,7 +5,8 @@ interface State {
   videos: string[];
   generationID: string[];
   mainPanel: string;
-  currentSlide: number
+  currentSlide: number,
+  userID: string,
 }
 
 const { state, onChange } = createStore<State>({
@@ -13,7 +14,8 @@ const { state, onChange } = createStore<State>({
   videos: [],
   generationID: [],
   mainPanel: "image",
-  currentSlide: 0
+  currentSlide: 0,
+  userID: ""
 });
 
 export function updateImages(newImageData: string) {
@@ -34,6 +36,9 @@ export function updateMainPanel(panelState: string) {
 }
 export function updateCurrentSlide(currentSlide: number) {
   state.currentSlide = currentSlide;
+}
+export function updateUserID(id: string) {
+  state.userID = id;
 }
 
 export { state, onChange };

@@ -1,5 +1,4 @@
 import { onChange, updateImages } from '../../store';
-import { baseURL } from '../universal/global';
 
 const reactiveImage = (newValue: string) => { return /*html*/`
   <img src='${newValue}' class='max-w-full max-h-full' />
@@ -22,7 +21,7 @@ export async function generateImage() {
       if (!prompt || prompt.length < 1) {
         prompt = (document.querySelector('#promptSelect') as HTMLInputElement).value.replace(/_/g, ' ');
       }
-      const url = `${baseURL}/image`;
+      const url = `/image`;
       const response = await fetch(url, {
         method: "POST",
         headers: {

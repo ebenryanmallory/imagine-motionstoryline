@@ -25,6 +25,8 @@ Ensure you have the following installed on your system:
 
 2. **Environment Variables**
 
+  Rename wrangler-example.toml to wrangler.toml and add your own values for your Cloudflare project.
+
    This project may require setting up environment variables. If applicable, create a `.env` file in the root directory and populate it with a STABILITY_API_KEY. You will need to get this from Stability AI. You will need to set up dotenv to access this variable in local development. You can also set a secret in your Cloudflare Worker and use the --remote flag.
 
 ### Running the Project

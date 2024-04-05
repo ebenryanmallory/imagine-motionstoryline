@@ -2,17 +2,21 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import FormData from "form-data";
 
+import { sleep, base64ToBlob } from './actions'
 import { serveStatic } from 'hono/cloudflare-workers'
 import { Ai } from '@cloudflare/ai'
 // @ts-ignore
 import manifest from '__STATIC_CONTENT_MANIFEST'
 
 type Bindings = {
-	AI: any
-}
-
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+	AI: any,
+    IMAGINE_BUCKET: R2Bucket,
+    STABILITY_API_KEY: string,
+    FIREBASE_API_KEY: string,
+    FIREBASE_AUTH_DOMAIN: string,
+    FIREBASE_DATABASE_URL: string,
+    FIREBASE_PROJECT_ID: string,
+    FIREBASE_STORAGE_BUCKET: string
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
@@ -21,6 +25,28 @@ app.use('*', cors())
 
 app.use('/static/*', serveStatic({ root: './', manifest }))
 app.use('/', serveStatic({ path: './index.html', manifest }))
+
+app.get('/bucket', async (c) => {
+    const { objects } = await c.env.IMAGINE_BUCKET.list();
+    const items = objects.map((obj: { key: any; }) => obj.key);
+  
+    return c.json(items);
+});
+
+app.post('/bucket', async (c) => {
+
+    const body = await c.req.json();
+    const base64Images = body.images;
+    const mimeType = "image/png";
+    const uploadPromises = base64Images.map((base64Image: string, index: number) => {
+        const fileName = "custom.png";
+        const blob = base64ToBlob(base64Image, mimeType);
+        return c.env.IMAGINE_BUCKET.put(fileName, blob);
+    });
+    const responseArray = await Promise.all(uploadPromises);
+    return c.json(responseArray);
+
+});
 
 app.post('/image', async (c) => {
     const body = await c.req.json();
@@ -48,15 +74,6 @@ app.post('/video', async (c) => {
     const api_key = c.env.STABILITY_API_KEY;
     const base64Image = body.image;
     const data = new FormData();
-    function base64ToBlob(base64: string, mimeType: string) {
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        return new Blob([byteArray], {type: mimeType});
-    }
     
     const mimeType = "image/png"; // or jpeg
     const blob = base64ToBlob(base64Image, mimeType);
@@ -65,7 +82,7 @@ app.post('/video', async (c) => {
 
     data.append("seed", 0);
     data.append("cfg_scale", 8); //  0 .. 10
-    data.append("motion_bucket_id", 50); //  1 .. 255
+    data.append("motion_bucket_id", 127); //  1 .. 255
 
     const statusResponse = await fetch(`https://api.stability.ai/v2beta/image-to-video`, {
         method: "POST",
