@@ -1,5 +1,6 @@
 import '@shoelace-style/shoelace/dist/components/dialog/dialog.js';
 import '@shoelace-style/shoelace/dist/components/divider/divider.js';
+import '@shoelace-style/shoelace/dist/components/alert/alert.js';
 import { arrayBufferToBase64 } from '../../universal/global';
 import { state } from '../../../store';
 import { login } from './login'
@@ -38,11 +39,18 @@ const setupEventListeners = () => {
                 prompts: state.prompts
             })
         });
-        if (!bucketResponse.ok) {
+        const container = document.querySelector('.alert-duration') as HTMLDivElement;
+        const successToast = container.querySelector('sl-alert[variant="success"]') as HTMLDivElement;
+        const warningToast = container.querySelector('sl-alert[variant="warning"]') as HTMLDivElement;
+        if (bucketResponse.ok) {
             const responseJson = await bucketResponse.json();
-            console.log('Upload successful', responseJson);
+            // console.log('Upload successful', responseJson);
+            // @ts-ignore -- Shoelace method
+            successToast.toast();
         } else {
             console.error('Upload failed', await bucketResponse.text());
+            // @ts-ignore -- Shoelace method
+            warningToast.toast();
         }
     });
 }
@@ -83,4 +91,14 @@ export const uploadModal = () => {
         </div>
         <sl-button id="uploadAllButton" slot="footer" variant="primary" ${state.userID === "" ? 'disabled' : ''}>Upload all</sl-button>
     </sl-dialog>
+    <div class="alert-duration">
+        <sl-alert variant="success" duration="3000" closable>
+            <sl-icon slot="icon" name="check2-circle"></sl-icon>
+            Upload completed successfully.
+        </sl-alert>
+        <sl-alert variant="warning" duration="3000" closable>
+            <sl-icon slot="icon" name="exclamation-triangle"></sl-icon>
+            Something went wrong while uploading. Please try again.
+        </sl-alert>
+    </div>
 `}
