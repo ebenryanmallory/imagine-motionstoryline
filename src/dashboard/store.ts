@@ -49,42 +49,18 @@ export function updateUserID(id: string) {
 export { state, onChange };
 
 /* 
+  The current state management in the application lacks a defined structure for associating prompts with their resulting images and videos. 
+  Initially, a single array of objects was considered to create a hierarchical relationship under a common parent attribute 
+  (such as the creation prompt) where images and videos were clearly linked. The current workflow involves creating 
+  an image from a prompt and then a video from that image using the Stability AI API, so linking images (under a prompt) to it's
+  corresponding video (under an image) could have made sense, but to maintain flexibility for future versions such as creating 
+  videos without reference images this approach seemed constraining.
 
-  Normal data structure might be arrays of objects, or similar
-  [
-    {
-      prompt: '',
-      video: {
-        generationID,
-      },
-      image: {}
-    }
-  ]
-  Or create two separate arrays for videos and images with no direct relationship:
-  Image array:
-  [
-    {
-      prompt: '',
-      imageData: ''
-    }
-  ]
-  Video array:
-  [
-    {
-      baseImage: '',
-      generationID: '',
-      videoData: ''
-    }
-  ]
-  However, at the beginning of the project it was not clear if one prompt would be tied to both the video and image, 
-  and in the future it still may not make sense to do this. So we have a bunch of disjointed arrays and a currentSlide 
-  which is used to index, and create a new entry in each array every time a new prompt is generated so the association 
-  still exists based on index. 
-  This approach seems less organized, more confusing, and adds difficulty and issues in enforcing syncing. 
-  However, I chose this general and flexible data structure approach until I have a better understanding of 
-  the project requirements and relationship between prompts, images, and videos.
-  I definitely feel like the existing APIs used may allow prompting in the video generation process, and / or I may
-  migrate to or use different APIs that allow prompts. At that point I would want some association between prompts
-  available to users (it might make sense to use the same prompt used to create the image in the video, and use the 
-  video prompt to add information about movement)
+  Two alternative data structures are options:
+  1. A single array of objects, each containing a prompt, image, and video data, with a clear relationship between them.
+  2. Separate arrays for images and videos without a direct relationship, only linked conceptually by the UI.
+
+  The current approach uses separate arrays indexed by currentSlide. This allows for loose association by index but results 
+  in a less organized and potentially confusing structure that complicates synchronization.
+
 */

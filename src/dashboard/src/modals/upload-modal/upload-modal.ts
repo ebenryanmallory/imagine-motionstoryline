@@ -44,7 +44,7 @@ const setupEventListeners = () => {
         const warningToast = container.querySelector('sl-alert[variant="warning"]') as HTMLDivElement;
         if (bucketResponse.ok) {
             const responseJson = await bucketResponse.json();
-            // console.log('Upload successful', responseJson);
+            console.log('Upload successful', responseJson);
             // @ts-ignore -- Shoelace method
             successToast.toast();
         } else {
