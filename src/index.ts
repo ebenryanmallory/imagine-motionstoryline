@@ -41,19 +41,23 @@ app.post('/bucket', async (c) => {
     const prompts = body.prompts;
     const userID = body.userID;
     const mimeType = "image/png";
-    const uploadPromises = base64Images.map((base64Image: string, index: number) => {
+
+    const uploadPromisesImages = base64Images.map((base64Image: string, index: number) => {
+        if (base64Image === null) { return };
+        base64Image = base64Image.replace('data:image/png;base64,', '');
         const fileName = `${userID}/images/${prompts[index]}.png`;
         const blob = base64ToBlob(base64Image, mimeType);
         return c.env.IMAGINE_BUCKET.put(fileName, blob);
     });
-    base64Videos.map((base64Video: string, index: number) => {
+    const uploadPromisesVideos = base64Videos.map((base64Video: string, index: number) => {
+        if (base64Video === null) { return };
         const fileName = `${userID}/videos/${prompts[index]}.mp4`;
         const blob = base64ToBlob(base64Video, "video/*");
         return c.env.IMAGINE_BUCKET.put(fileName, blob);
     });
-    const responseArray = await Promise.all(uploadPromises);
+    const combinedPromises: string[] = [...uploadPromisesImages, ...uploadPromisesVideos];
+    const responseArray = await Promise.all(combinedPromises);
     return c.json(responseArray);
-
 });
 
 app.post('/image', async (c) => {
@@ -80,7 +84,8 @@ app.post('/video', async (c) => {
     const body = await c.req.json();
     // @ts-ignore
     const api_key = c.env.STABILITY_API_KEY;
-    const base64Image = body.image;
+    let base64Image = body.image;
+    base64Image = base64Image.replace('data:image/png;base64,', '');
     const data = new FormData();
     
     const mimeType = "image/png"; // or jpeg
@@ -90,7 +95,7 @@ app.post('/video', async (c) => {
 
     data.append("seed", 0);
     data.append("cfg_scale", 8); //  0 .. 10
-    data.append("motion_bucket_id", 127); //  1 .. 255
+    data.append("motion_bucket_id", 50); //  1 .. 255
 
     const statusResponse = await fetch(`https://api.stability.ai/v2beta/image-to-video`, {
         method: "POST",
@@ -103,7 +108,7 @@ app.post('/video', async (c) => {
     
     if (!statusResponse.ok) {
         console.log(statusResponse.status)
-        return {}
+        return;
     }
     const responseJSON = await statusResponse.json();
     // @ts-ignore

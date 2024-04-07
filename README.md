@@ -63,7 +63,7 @@ yarn deploy
 yarn tailwind
 ```
 
-This compiles the TailwindCSS file from `./tailwind.css` to `./assets/static/tailwind.css`.
+This compiles the TailwindCSS file from `./tailwind.css` to `./cloudflare-base/static/tailwind.css`.
 
 - **Prebuild Script**
 

@@ -5,9 +5,10 @@
   "scripts": {
     "deploy": "yarn prebuild & npx wrangler deploy",
     "start": "yarn prebuild & yarn tailwind & npx wrangler dev --remote",
-    "tailwind": "npx tailwindcss -i ./tailwind.css -o ./assets/static/tailwind.css",
+    "tailwind": "npx tailwindcss -i ./tailwind.css -o ./cloudflare-base/static/tailwind.css",
     "dev": "yarn prebuild & yarn tailwind & npx wrangler dev",
-    "prebuild": "cd ./src/dashboard & yarn build"
+    "prebuild": "cd ./src/dashboard & yarn build",
+    "postbuild": "echo 'Dashboard built successfully. The generated files are located in the cloudflare-base/static/dashboard-dist folder.'"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240208.0",

@@ -28,7 +28,7 @@ const setupEventListeners = () => {
       carousel.innerHTML = imageString;
       modalImage.innerHTML = reactiveImage(newValue[state.currentSlide]);
       const openTrigger = document.querySelectorAll('.nav-carousel img');
-      openTrigger.forEach((img: Element) => img.addEventListener('click', (e) => dialog.show()));
+      openTrigger.forEach((img: Element) => img.addEventListener('click', () => dialog.show()));
   });
   onChange('currentSlide', (currentSlide: number) => {
     modalImage.innerHTML = reactiveImage(state.images[currentSlide]);

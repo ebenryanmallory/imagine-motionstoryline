@@ -12,9 +12,9 @@ const reactiveImage = (newValue: string) => { return /*html*/`
 `};
 
 const setupEventListeners = () => {
-  const generateButton = document.querySelector('#generate');
+  const generateButton = document.querySelector('#generate') as HTMLButtonElement;
   generateButton.addEventListener('click', generateImage);
-  const container = document.querySelector('#image-container');
+  const container = document.querySelector('#image-container') as HTMLDivElement;
   onChange('images', (newValue: string[]) => {
     container.innerHTML = reactiveImage(newValue[newValue.length - 1]);
   });

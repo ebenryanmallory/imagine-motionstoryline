@@ -177,4 +177,4 @@ package-lock.json
 wrangler.toml
 
 # Dashboard assets are generated
-assets/static/dashboard/*
+cloudflare-base/static/dashboard-dist/*

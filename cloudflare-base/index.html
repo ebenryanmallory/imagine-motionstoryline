@@ -87,8 +87,8 @@
       const showView = async() => {
         document.querySelector('body').classList.add('overflow-hidden');
         document.querySelector('#view').innerHTML = "<style id='dashboard-styles'></style><div id='dashboard'></div>";
-        await import('/static/dashboard/index.js');
-        const cssPromise = await fetch('/static/dashboard/index.css');
+        await import('/static/dashboard-dist/index.js');
+        const cssPromise = await fetch('/static/dashboard-dist/index.css');
         const css = await cssPromise.text();
         document.querySelector('#dashboard-styles').innerHTML = css;
       }

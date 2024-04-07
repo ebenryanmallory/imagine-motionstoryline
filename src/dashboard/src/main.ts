@@ -10,9 +10,9 @@ import { imageTextInput } from './image/imageTextInput';
 import { videoOptions } from './video/vidoeOptions';
 
 const setupEventListeners = () => {
-    const mainArea = document.querySelector('#main-area');
-    const menuItems = document.querySelectorAll('sl-menu-item');
-    menuItems.forEach(item => item.addEventListener('click', (e) => updateMainPanel(e.target.value)));
+    const mainArea = document.querySelector('#main-area') as HTMLDivElement;
+    const menuItems = document.querySelectorAll('sl-menu-item') as NodeListOf<HTMLElement>;
+    menuItems.forEach(item => item.addEventListener('click', (e: MouseEvent) => updateMainPanel((e.target as HTMLInputElement).value)));
     onChange('mainPanel', (newValue: string) => {
         mainArea.innerHTML = newValue === 'video' ? videoOptions() : imageTextInput();
     });
