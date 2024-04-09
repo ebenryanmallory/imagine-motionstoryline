@@ -3,7 +3,7 @@ main = "src/index.ts"
 compatibility_date = "2023-05-18"
 
 [site]
-bucket = "./assets"
+bucket = "./cloudflare-base"
 
 [ai]
 binding = "AI" # i.e. available in your Worker on env.AI
